@@ -1,6 +1,5 @@
 import csv
 
-filename = 'soccer_players.csv'
 
 # Read the CSV data
 # -----------------
@@ -21,6 +20,7 @@ def csv_to_dictlist(filename):
 def split_players(players):
     experienced = []
     inexperienced = []
+    invalid = []
 
     for player in players:
         if player['Soccer Experience'] == 'YES':
@@ -28,25 +28,64 @@ def split_players(players):
         elif player['Soccer Experience'] == 'NO':
             inexperienced.append(player)
         else:
-            raise ValueError("{}'s experience is {}, which is an invalid value".format(player['Name'], player['Soccer Experience']))
+            invalid.append(player)
 
-    return (experienced, inexperienced)
+    return (experienced, inexperienced, invalid)
+
+# Allocate players to teams
+# -------------------------
+def allocate_players(players, teams):
+    (experienced, inexperienced, invalid) = split_players(players)
+
+    team_rosters = []
+    for team in teams:
+        team_rosters.append([])
+    team_index = 0
+
+    while len(experienced) % len(teams) != 0:
+        # the experienced players cannot be evenly allocated to teams
+        last_player = experienced.pop()
+        invalid.append(last_player)
+    for player in experienced:
+        team_rosters[team_index].append(player)
+        team_index = (team_index + 1) % len(teams)
+
+    while len(inexperienced) % len(teams) != 0:
+        # the inexperienced players cannot be evenly allocated to teams
+        last_player = inexperienced.pop()
+        invalid.append(last_player)
+    for player in inexperienced:
+        team_rosters[team_index].append(player)
+        team_index = (team_index + 1) % len(teams)
+
+    team_rosters.append(invalid)
+
+    return team_rosters
+
 
 
 if __name__ == "__main__":
+    
+    filename = 'soccer_players.csv'
+    # filename = 'invalid_players.csv'
+
+    teams = ['Sharks',
+             'Dragons',
+             'Raptors',
+            ]
 
     players = csv_to_dictlist(filename=filename)
+    allocated_players = allocate_players(players, teams)
 
-    (experienced, inexperienced) = split_players(players)
+    for i in range(len(teams)):
+        print(teams[i])
+        print("=" * len(teams[i]))
+        for player in allocated_players[i]:
+            print(player['Name'])
+    if len(allocated_players[len(teams)]) != 0:
+        print("INVALID PLAYERS")
+        print("===============")
+        for player in allocated_players[len(teams)]:
+            print(player['Name'])
 
-    print("EXPERIENCED:")
-    print("============")
-    for player in experienced:
-        for key in player.keys():
-            print("{}: {}".format(key, player[key]))
-    print("INEXPERIENCED:")
-    print("==============")
-    for player in inexperienced:
-        for key in player.keys():
-            print("{}: {}".format(key, player[key]))
 
