@@ -63,6 +63,27 @@ def allocate_players(players, teams):
     return team_rosters
 
 
+# Create teams list
+# -----------------
+def create_teams_list(team_names, team_rosters):
+    output_text = []
+
+    for i in range( len(team_names) ):
+        output_text.append(team_names[i])
+
+        for player in team_rosters[i]:
+            player_details = ", ".join(player.values())
+            output_text.append(player_details)
+
+
+    if len(team_rosters[len(team_names)]) != 0:
+        print("INVALID PLAYERS")
+        print("===============")
+        for player in team_rosters[len(team_names)]:
+            print(player['Name'])
+
+    return output_text
+
 
 if __name__ == "__main__":
     
@@ -75,17 +96,11 @@ if __name__ == "__main__":
             ]
 
     players = csv_to_dictlist(filename=filename)
-    allocated_players = allocate_players(players, teams)
+    
+    team_rosters = allocate_players(players=players, teams=teams)
 
-    for i in range(len(teams)):
-        print(teams[i])
-        print("=" * len(teams[i]))
-        for player in allocated_players[i]:
-            print(player['Name'])
-    if len(allocated_players[len(teams)]) != 0:
-        print("INVALID PLAYERS")
-        print("===============")
-        for player in allocated_players[len(teams)]:
-            print(player['Name'])
+    team_details = create_teams_list(team_rosters=team_rosters,
+                                     team_names=teams)
 
-
+    for row in team_details:
+        print(row)
