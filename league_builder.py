@@ -16,12 +16,37 @@ def csv_to_dictlist(filename):
     return output_dictlist
 
 
+# Split players into experienced and inexperienced
+# ------------------------------------------------
+def split_players(players):
+    experienced = []
+    inexperienced = []
+
+    for player in players:
+        if player['Soccer Experience'] == 'YES':
+            experienced.append(player)
+        elif player['Soccer Experience'] == 'NO':
+            inexperienced.append(player)
+        else:
+            raise ValueError("{}'s experience is {}, which is an invalid value".format(player['Name'], player['Soccer Experience']))
+
+    return (experienced, inexperienced)
+
+
 if __name__ == "__main__":
 
     players = csv_to_dictlist(filename=filename)
 
-    for player in players:
+    (experienced, inexperienced) = split_players(players)
+
+    print("EXPERIENCED:")
+    print("============")
+    for player in experienced:
         for key in player.keys():
             print("{}: {}".format(key, player[key]))
-
+    print("INEXPERIENCED:")
+    print("==============")
+    for player in inexperienced:
+        for key in player.keys():
+            print("{}: {}".format(key, player[key]))
 
