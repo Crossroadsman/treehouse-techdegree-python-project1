@@ -30,7 +30,8 @@ Permitted Programming Constructs
 - variable packing/unpacking
 
 ### Other ###
-- file IO
-- CSV/JSON conversion
+- Python File I/O
+- CSV and JSON in Python
+- Understanding Dunder Main (__main__)
 
 
