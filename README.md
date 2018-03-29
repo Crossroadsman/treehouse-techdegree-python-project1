@@ -34,4 +34,6 @@ Permitted Programming Constructs
 - CSV and JSON in Python
 - Understanding Dunder Main (__main__)
 
-
+Forbidden Programming Constructs
+--------------------------------
+- raise
