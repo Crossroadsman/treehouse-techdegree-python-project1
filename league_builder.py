@@ -135,7 +135,7 @@ if __name__ == "__main__":
              'Raptors',
             ]
 
-    first_practice_datetime = "April 15, 2018"
+    first_practice_datetime = "April 15, 2018 at 18:30"
 
     players = csv_to_dictlist(filename=input_filename)
     
